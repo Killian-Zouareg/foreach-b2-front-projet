@@ -1,32 +1,37 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+  <v-app>
+    <v-app-bar app color="primary" dark>
+      <div class="d-flex align-center">
+        <v-img
+          alt="Genius Game Logo"
+          class="shrink mr-2"
+          contain
+          src="https://pbs.twimg.com/profile_images/1035723269989650433/ucuo7VTh_400x400.jpg"
+          transition="scale-transition"
+          width="40"
+        />
+
+        <p alt="Vuetify Name" min-width="100" width="100">Genius Game</p>
+      </div>
+
+      <v-btn depressed color="yellow" class="black--text"
+            href="/GuessTheCover"> Guess by cover </v-btn>
+
+      <v-spacer></v-spacer>
+    </v-app-bar>
+
+    <v-main>
+      <router-view />
+    </v-main>
+  </v-app>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+export default {
+  name: 'App',
 
-#nav {
-  padding: 30px;
+  data: () => ({
+    //
+  })
 }
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
+</script>
