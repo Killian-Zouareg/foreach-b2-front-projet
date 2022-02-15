@@ -55,8 +55,12 @@
   <v-container>
 
     <p>
-      Score : {{score.actualScore}} / {{score.maxScore}}
+      Score : {{ `${actualScore}`}} / {{ `${maxScore}`}}
     </p>
+
+    <v-btn @click="resetScore">
+      RESET SCORE 
+    </v-btn>
 
   </v-container>
 </div>
@@ -66,57 +70,70 @@
 import { generateCover } from '../apis/generateCover'
 import { getLyrics, getSong , getSongById } from 'genius-lyrics-api';
 import axios from 'axios';
+import { INCREMENT_MAXSCORE, INCREMENT_ACTUALSCORE, RESET_SCORE } from '../store/mutation'
+import { mapMutations, mapState } from 'vuex'
+
 
 
 export default {
-name:'GuessTheCover',
-data() {
-    return {
-        score: {
-          maxScore:0,
-          actualScore:0
-        },
-        artistName:'',
-        albumName:'',
-        result: {},
-        random:0,
-        song :{
-        albumName :'',
-	    albumArt: '',	// URL of the album art image (jpg/png)
-}
-    }
-},
-methods: {
-    async generateCover(){
-        const url = 'https://api.genius.com/songs/';
-        const options = {
-	        apiKey: 'zN0Wcr2jF6nWf81eCXkxOTl-YOYCMBk6XveW8Rm9RT7AIOKC2snNBEPO-wS--O_7',
-        };
-        this.random = Math.floor(Math.random()* (999999 - 1) + 1)
-        try{
-        const res = await axios.get(`${url}${this.random}?access_token=${options.apiKey}`)
-        this.song.albumArt =  res.data.response.song.album.cover_art_url
-        this.song.albumName = res.data.response.song.album.name.replace(/ /g,"")
-        this.song.artistName = res.data.response.song.artist_names.replace(/ /g,"")
-        console.log(this.song.albumName);
-        console.log(this.song.artistName) 
-        }catch(e){
+  name:'GuessTheCover',
+  data() {
+      return {
+          artistName:'',
+          albumName:'',
+          result: {},
+          random:0,
+          song :{
+          albumName :'',
+        albumArt: '',	// URL of the album art image (jpg/png)
+  }
+      }
+  },
+  computed:{
+    ...mapState({
+      maxScore: 'maxScore',
+      actualScore: 'actualScore'
+    })
+  },
+  methods: {
+      async generateCover(){
+          const url = 'https://api.genius.com/songs/';
+          const options = {
+            apiKey: 'zN0Wcr2jF6nWf81eCXkxOTl-YOYCMBk6XveW8Rm9RT7AIOKC2snNBEPO-wS--O_7',
+          };
+          this.random = Math.floor(Math.random()* (999999 - 1) + 1)
+          try{
+          const res = await axios.get(`${url}${this.random}?access_token=${options.apiKey}`)
+          this.song.albumArt =  res.data.response.song.album.cover_art_url
+          this.song.albumName = res.data.response.song.album.name.replace(/ /g,"")
+          this.song.artistName = res.data.response.song.artist_names.replace(/ /g,"")
+          console.log(this.song.albumName);
+          console.log(this.song.artistName) 
+          }catch(e){
+              this.generateCover()
+          }    
+      },
+      async checkResult(){
+        console.log("TEST BOUTON");
+        if (this.albumName.replace(/ /g,"") === this.song.albumName || this.artistName.replace(/ /g,"") == this.song.artistName){
+            console.log('Gagné');
+            this.incrementActual()
+            this.incrementMax()
             this.generateCover()
-        }    
-    },
-    async checkResult(){
-      console.log("TEST BOUTON");
-       if (this.albumName.replace(/ /g,"") === this.song.albumName || this.artistName.replace(/ /g,"") == this.song.artistName){
-           console.log('Gagné');
-           this.score.actualScore += 1
-           this.score.maxScore += 1
-           this.generateCover()
-       }else {
-         this.score.maxScore += 1
-          this.generateCover()
-       }
-    }
-}
+        }else {
+            this.incrementMax()
+            this.generateCover()
+        }
+      },
+      resetScore(){
+        this.resetScore()
+      },
+      ...mapMutations({
+        incrementMax : INCREMENT_MAXSCORE,
+        incrementActual: INCREMENT_ACTUALSCORE,
+        resetScore: RESET_SCORE
+      })
+  }
 }
 </script>
 
