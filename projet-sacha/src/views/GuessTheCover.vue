@@ -10,7 +10,7 @@
         mdi-album
       </v-icon>
     </v-btn>
-    &#8592 Generate a cover
+    &#8592; Generate a cover
     <v-img
         :lazy-src="song.albumArt" 
         max-height="500"
@@ -73,6 +73,13 @@
     </v-icon>
     </div>
   </v-container>
+  <v-container >
+    <div id="flex">
+    <v-icon v-show="success" size="500px" id="success">
+      mdi-thumb-up
+    </v-icon>
+    </div>
+  </v-container>
 </div>
 </template>
 
@@ -91,6 +98,7 @@ export default {
       return {
           isCover: false,
           fail:false,
+          success: false,
           artistName:'',
           albumName:'',
           result: {},
@@ -135,6 +143,10 @@ export default {
             this.albumName = ""
             this.artistName =""
             this.generateCover()
+            this.success = true
+            setTimeout(() => {
+              this.success = false
+            }, 1500)
         }else {
             this.fail = true
             setTimeout(() => {
@@ -162,6 +174,14 @@ export default {
 
 #fail{
   color: red;
+  position: absolute;
+  justify-content: center;
+  top: 25%;
+  left: 35%;
+}
+
+#success{
+  color: greenyellow;
   position: absolute;
   justify-content: center;
   top: 25%;
