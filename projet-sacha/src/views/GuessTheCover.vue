@@ -10,6 +10,7 @@
         mdi-album
       </v-icon>
     </v-btn>
+    &#8592 Generate a cover
     <v-img
         :lazy-src="song.albumArt" 
         max-height="500"
@@ -44,6 +45,7 @@
         </v-col>
       </v-row>
        <v-btn
+      :disabled="!isCover"
       color="success"
       class="mr-4"
       @click="checkResult"
@@ -63,6 +65,14 @@
     </v-btn>
 
   </v-container>
+
+  <v-container >
+    <div id="flex">
+    <v-icon v-show="fail" size="500px" id="fail">
+      mdi-alpha-x-circle-outline
+    </v-icon>
+    </div>
+  </v-container>
 </div>
 </template>
 
@@ -79,11 +89,13 @@ export default {
   name:'GuessTheCover',
   data() {
       return {
+          isCover: false,
+          fail:false,
           artistName:'',
           albumName:'',
           result: {},
-          random:0,
           song :{
+          artistName:'',
           albumName :'',
         albumArt: '',	// URL of the album art image (jpg/png)
   }
@@ -101,14 +113,15 @@ export default {
           const options = {
             apiKey: 'zN0Wcr2jF6nWf81eCXkxOTl-YOYCMBk6XveW8Rm9RT7AIOKC2snNBEPO-wS--O_7',
           };
-          this.random = Math.floor(Math.random()* (999999 - 1) + 1)
+          let random = Math.floor(Math.random()* (999999 - 1) + 1)
           try{
-          const res = await axios.get(`${url}${this.random}?access_token=${options.apiKey}`)
+          const res = await axios.get(`${url}${random}?access_token=${options.apiKey}`)
           this.song.albumArt =  res.data.response.song.album.cover_art_url
           this.song.albumName = res.data.response.song.album.name.replace(/ /g,"")
           this.song.artistName = res.data.response.song.artist_names.replace(/ /g,"")
-          console.log(this.song.albumName);
-          console.log(this.song.artistName) 
+          this.isCover = true
+          console.log(this.song.albumName)
+          console.log(this.song.artistName)
           }catch(e){
               this.generateCover()
           }    
@@ -119,9 +132,17 @@ export default {
             console.log('Gagné');
             this.incrementActual()
             this.incrementMax()
+            this.albumName = ""
+            this.artistName =""
             this.generateCover()
         }else {
+            this.fail = true
+            setTimeout(() => {
+              this.fail = false
+            }, 1500)
             this.incrementMax()
+            this.albumName = ""
+            this.artistName = ""
             this.generateCover()
         }
       },
@@ -138,5 +159,17 @@ export default {
 </script>
 
 <style>
+
+#fail{
+  color: red;
+  position: absolute;
+  justify-content: center;
+  top: 25%;
+  left: 35%;
+}
+
+#flex {
+    display: flex;
+}
 
 </style>

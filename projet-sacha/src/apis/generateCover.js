@@ -1,5 +1,5 @@
 import axios from "axios";
 
-export async function generateCover(id) {
+export async function generateCover() {
   
 }
