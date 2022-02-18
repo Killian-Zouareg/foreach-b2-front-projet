@@ -2,20 +2,20 @@
   <v-app>
     <v-app-bar app color="grey" dark>
       <div class="d-flex align-center">
-        <v-img
-          alt="Genius Game Logo"
-          class="shrink mr-2"
-          contain
-          src="https://pbs.twimg.com/profile_images/1035723269989650433/ucuo7VTh_400x400.jpg"
-          transition="scale-transition"
-          width="40"
-        />
-
-        <p alt="Vuetify Name" min-width="100" width="100">Genius Game</p>
+        <router-link to="/">
+          <v-img
+            alt="Genius Game Logo"
+            class="shrink mr-2"
+            contain
+            src="https://camo.githubusercontent.com/2f1afecef9033d21cc42b61763e9de2f28dcebfde75576d317c9dce72eb5c592/68747470733a2f2f696d616765732e67656e6975732e636f6d2f38656436363963616464393536343433653239633730333631656334663337322e31303030783130303078312e706e67"
+            transition="scale-transition"
+            width="40" 
+          />
+        </router-link>
       </div>
 
       <v-btn depressed color="yellow" class="black--text"
-            href="/GuessTheCover"> Guess by cover </v-btn>
+            href="/GuessTheCover" id="lien"> Guess by cover </v-btn>
 
       <v-spacer></v-spacer>
     </v-app-bar>
@@ -35,3 +35,11 @@ export default {
   })
 }
 </script>
+
+<style scoped>
+
+#lien{
+  left: 1%;
+}
+
+</style>

@@ -18,6 +18,7 @@
         max-width="500"
         width="50%"
         :src="song.albumArt"
+        id="image"
     ></v-img>
     <v-form>
     <v-container>
@@ -121,12 +122,12 @@ export default {
           const options = {
             apiKey: 'zN0Wcr2jF6nWf81eCXkxOTl-YOYCMBk6XveW8Rm9RT7AIOKC2snNBEPO-wS--O_7',
           };
-          let random = Math.floor(Math.random()* (999999 - 1) + 1)
+          let random = Math.floor(Math.random()* (10000000 - 1) + 1)
           try{
           const res = await axios.get(`${url}${random}?access_token=${options.apiKey}`)
           this.song.albumArt =  res.data.response.song.album.cover_art_url
-          this.song.albumName = res.data.response.song.album.name.replace(/ /g,"")
-          this.song.artistName = res.data.response.song.artist_names.replace(/ /g,"")
+          this.song.albumName = res.data.response.song.album.name.replace(/ /g,"").toLowerCase()
+          this.song.artistName = res.data.response.song.artist_names.replace(/ /g,"").toLowerCase()
           this.isCover = true
           console.log(this.song.albumName)
           console.log(this.song.artistName)
@@ -136,7 +137,7 @@ export default {
       },
       async checkResult(){
         console.log("TEST BOUTON");
-        if (this.albumName.replace(/ /g,"") === this.song.albumName || this.artistName.replace(/ /g,"") == this.song.artistName){
+        if (this.albumName.replace(/ /g,"").toLowerCase() === this.song.albumName || this.artistName.replace(/ /g,"").toLowerCase() == this.song.artistName){
             console.log('Gagné');
             this.incrementActual()
             this.incrementMax()
@@ -178,6 +179,8 @@ export default {
   justify-content: center;
   top: 25%;
   left: 35%;
+  animation-duration: 2s;
+  animation-name: shake;
 }
 
 #success{
@@ -190,6 +193,28 @@ export default {
 
 #flex {
     display: flex;
+}
+
+#image{
+  left: 25%;
+}
+
+@keyframes shake {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+  
+  20%, 80% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  30%, 50%, 70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  40%, 60% {
+    transform: translate3d(4px, 0, 0);
+  }
 }
 
 </style>
