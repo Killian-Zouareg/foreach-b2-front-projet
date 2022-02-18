@@ -117,6 +117,8 @@ export default {
     })
   },
   methods: {
+
+      // Function to generate an album cover
       async generateCover(){
           const url = 'https://api.genius.com/songs/';
           const options = {
@@ -135,6 +137,8 @@ export default {
               this.generateCover()
           }    
       },
+
+      // Function to check the result from the user
       async checkResult(){
         console.log("TEST BOUTON");
         if (this.albumName.replace(/ /g,"").toLowerCase() === this.song.albumName || this.artistName.replace(/ /g,"").toLowerCase() == this.song.artistName){
